@@ -151,7 +151,7 @@ namespace WebApiUnidad2.Models
             {
                 Subject = new ClaimsIdentity(new[] {
                       new Claim(ClaimTypes.Name, username)}),
-                Expires = DateTime.UtcNow.AddMinutes(30),
+                Expires = DateTime.UtcNow.AddDays(120),
                 Issuer = "Integración 3",
                 SigningCredentials = new SigningCredentials(securityKey,
                 SecurityAlgorithms.HmacSha256Signature)
