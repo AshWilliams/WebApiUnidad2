@@ -6,12 +6,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApiUnidad2.Models
 {
     public class CapaDatos : IDisposable
     {
         private static IConfiguration configuration;
+        /*
+         * HMACSHA256 hmac = new HMACSHA256();
+         * string Secret = Convert.ToBase64String(hmac.Key);
+         */
+        private static string Secret = "qW/8zPiKxQenLqd3ULJBVkjIQ/JoWbdEa83+CkmEQZ4PeSTRKoSw/zyvKesGXSQT9JfXox/SMwJBDLUeoz44FA==";
+
         #region "Dispose"
         /// <summary>
         /// Releases unmanaged and - optionally - managed resources.
@@ -86,6 +95,27 @@ namespace WebApiUnidad2.Models
 
         }
 
+        public async Task<DataTable> getPlatilloPorId(int id)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                var qry = "select * from Platillos where idPlatillo = @id";
+                Dictionary<string, string> pars = new Dictionary<string, string>();
+                pars.Add("@id", id.ToString());
+                using (var db = new SQLServer(configuration))
+                {
+                    dt = await db.getQueryResultAsync(qry, pars, "text");
+                }
+                return dt;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
 
         public async Task<bool> updateStock(string ingredientes)
         {
@@ -111,6 +141,73 @@ namespace WebApiUnidad2.Models
                 throw;
             }
 
+        }
+
+        public string GenerateToken(string username)
+        {
+            byte[] key = Convert.FromBase64String(Secret);
+            SymmetricSecurityKey securityKey = new SymmetricSecurityKey(key);
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] {
+                      new Claim(ClaimTypes.Name, username)}),
+                Expires = DateTime.UtcNow.AddMinutes(30),
+                Issuer = "Integración 3",
+                SigningCredentials = new SigningCredentials(securityKey,
+                SecurityAlgorithms.HmacSha256Signature)
+            };
+
+
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken token = handler.CreateJwtSecurityToken(descriptor);
+            return handler.WriteToken(token);
+        }
+
+        public string ValidateToken(string token)
+        {
+            string username = null;
+            ClaimsPrincipal principal = GetPrincipal(token);
+            if (principal == null)
+                return null;
+            ClaimsIdentity identity = null;
+            try
+            {
+                identity = (ClaimsIdentity)principal.Identity;
+            }
+            catch (NullReferenceException)
+            {
+                return null;
+            }
+            Claim usernameClaim = identity.FindFirst(ClaimTypes.Name);
+            username = usernameClaim.Value;
+            return username;
+        }
+
+        public ClaimsPrincipal GetPrincipal(string token)
+        {
+            try
+            {
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                JwtSecurityToken jwtToken = (JwtSecurityToken)tokenHandler.ReadToken(token);
+                if (jwtToken == null)
+                    return null;
+                byte[] key = Convert.FromBase64String(Secret);
+                TokenValidationParameters parameters = new TokenValidationParameters()
+                {
+                    RequireExpirationTime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+                SecurityToken securityToken;
+                ClaimsPrincipal principal = tokenHandler.ValidateToken(token,
+                      parameters, out securityToken);
+                return principal;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
         }
 
 
