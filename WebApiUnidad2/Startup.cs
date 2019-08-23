@@ -26,6 +26,12 @@ namespace WebApiUnidad2
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
             services.AddSwaggerGen(c=> {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
