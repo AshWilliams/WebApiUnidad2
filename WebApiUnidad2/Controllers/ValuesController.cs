@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 namespace WebApiUnidad2.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("MyPolicy")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
