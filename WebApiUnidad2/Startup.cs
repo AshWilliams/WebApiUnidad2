@@ -26,6 +26,18 @@ namespace WebApiUnidad2
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSwaggerGen(c=> {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                {
+                    Version = "1806IFTE-1 - PROYECTO DE INTEGRACION III, UNIDAD 2",
+                    Description = "Web Service Desarrollado por el grupo de Laura, José y Robert",
+                    Contact = new Swashbuckle.AspNetCore.Swagger.Contact()
+                    {
+                        Name = "Robert Rozas Navarro",
+                        Email = "robert.rozas@uniacc.edu"
+                    }
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +49,10 @@ namespace WebApiUnidad2
             }
 
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c=> {
+                c.SwaggerEndpoint("v1/swagger.json","API Precios");
+            });
         }
     }
 }
