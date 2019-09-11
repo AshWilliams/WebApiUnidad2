@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiUnidad2", "WebApiUnidad2.csproj", "{EEE2503F-51F1-40B2-A306-BD584C049C87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiUnidad2", "WebApiUnidad2.csproj", "{EEE2503F-51F1-40B2-A306-BD584C049C87}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "webservice-test", "..\webservice-test\webservice-test.csproj", "{564F7B8E-B384-4C83-807D-976ED8E9E858}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{EEE2503F-51F1-40B2-A306-BD584C049C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE2503F-51F1-40B2-A306-BD584C049C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE2503F-51F1-40B2-A306-BD584C049C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564F7B8E-B384-4C83-807D-976ED8E9E858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564F7B8E-B384-4C83-807D-976ED8E9E858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564F7B8E-B384-4C83-807D-976ED8E9E858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564F7B8E-B384-4C83-807D-976ED8E9E858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

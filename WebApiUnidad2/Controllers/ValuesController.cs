@@ -25,7 +25,11 @@ namespace WebApiUnidad2.Controllers
 
         
 
-        // GET api/values
+     
+        /// <summary>
+        /// Este es el método de entrada de nuestra api
+        /// </summary>
+        /// <returns>Listado de platillos</returns>
         [HttpGet]
         public async Task<ActionResult<string>> Get()
         {
