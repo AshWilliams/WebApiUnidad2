@@ -59,6 +59,7 @@ namespace WebApiUnidad2
             app.UseSwaggerUI(c=> {
                 c.SwaggerEndpoint("v1/swagger.json","API Precios");
             });
+            app.UseStaticFiles();
         }
     }
 }
