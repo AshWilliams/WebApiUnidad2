@@ -117,6 +117,36 @@ namespace WebApiUnidad2.Models
 
         }
 
+        public async Task<int> savePedido(Pedido item)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                var qry = @"insert into Pedido(idPlatillo,nombreCompleto,direccion,comuna,email,telefono,idTipoPago)
+                            values(@idPlatillo,@nombreCompleto,@direccion,@comuna,@email,@telefono,@idTipoPago)";
+                Dictionary<string, string> pars = new Dictionary<string, string>();
+                pars.Add("@idPlatillo", item.idPlatillo.ToString());
+                pars.Add("@nombreCompleto",item.nombreCompleto);
+                pars.Add("@direccion",item.direccion);
+                pars.Add("@comuna",item.comuna);
+                pars.Add("@email",item.email);
+                pars.Add("@telefono",item.telefono);
+                pars.Add("@idTipoPago",item.idTipoPago.ToString());
+                using (var db = new SQLServer(configuration))
+                {
+                    dt = await db.getQueryResultAsync(qry, pars, "text");
+                }
+          
+                return 1;
+            }
+            catch (Exception)
+            {
+                return 0;
+                throw;
+            }
+
+        }
+
         public async Task<bool> updateStock(string ingredientes)
         {
             try

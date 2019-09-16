@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using WebApiUnidad2.Models;
 
 namespace WebApiUnidad2.Controllers
 {
@@ -113,10 +115,39 @@ namespace WebApiUnidad2.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<int>> Post(Pedido item)
         {
-        }
+            try
+            {
+                int respuesta = 0;
+                CapaDatos misDatos = new CapaDatos(configuration);
+                var grupo = "grupouniacc";
+                var headers = Request.Headers;
+                StringValues headerValues;
+                headers.TryGetValue("tokenBearer", out headerValues);
+                var tokenBearer = headerValues.First();
+                headers.TryGetValue("username", out headerValues);
+                var username = headerValues.First();
+                string tokenUsername = misDatos.ValidateToken(tokenBearer);
 
+                if (tokenUsername.Equals(grupo))
+                {
+                    using (misDatos = new CapaDatos(configuration))
+                    {
+                        respuesta = await misDatos.savePedido(item);
+                    }
+                    return respuesta;
+                }
+                else
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Oooops, Acceso No Autorizado!!!");                
+            }
+        }
         // PUT api/values/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
